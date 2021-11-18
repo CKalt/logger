@@ -1,7 +1,6 @@
-use std::fs::{OpenOptions, File};
+use std::fs::OpenOptions;
 use std::fs;
-//use std::io::{Read, Write, Seek, SeekFrom};
-//use std::io::{Read, Seek, SeekFrom};
+use std::io::{Read, Seek, SeekFrom};
 use gag::Redirect;
 //use dirs::data_local_dir;
 
@@ -43,7 +42,7 @@ fn config_file_path() -> io::Result<PathBuf> {
     Ok(dir)
 }
 
-fn setup_logging() -> Redirect<File> {
+fn main() {
     let pathbuf = config_file_path().expect("Couldn't");
     println!("config file = {}", pathbuf.display());
 
@@ -65,12 +64,6 @@ fn setup_logging() -> Redirect<File> {
 
     // env_logger test
     env_logger::init();
-    print_redirect
-}
-
-fn main() {
-//    let print_redirect = setup_logging();
-    setup_logging();
 
     debug!("this is a debug {}", "message");
     error!("this is printed by default");
@@ -80,8 +73,6 @@ fn main() {
         info!("the answer was: {}", x);
     }
 
-    // Extract redirect
-    /*
     if false {
         let mut log = print_redirect.into_inner();
 
@@ -90,5 +81,4 @@ fn main() {
         log.read_to_string(&mut buf).unwrap();
         println!("buf is = {}", &buf[..]);
     }
-    */
 }
