@@ -1,12 +1,12 @@
-use std::fs::OpenOptions;
+use std::fs::{OpenOptions, File};
+use std::fs;
 //use std::io::{Read, Write, Seek, SeekFrom};
-use std::io::{Read, Seek, SeekFrom};
+//use std::io::{Read, Seek, SeekFrom};
 use gag::Redirect;
 //use dirs::data_local_dir;
 
 use std::env;
 use std::io;
-use std::fs;
 use std::path::PathBuf;
 
 use log::{debug, error, log_enabled, info, Level};
@@ -43,7 +43,7 @@ fn config_file_path() -> io::Result<PathBuf> {
     Ok(dir)
 }
 
-fn main() {
+fn setup_logging() -> Redirect<File> {
     let pathbuf = config_file_path().expect("Couldn't");
     println!("config file = {}", pathbuf.display());
 
@@ -65,6 +65,12 @@ fn main() {
 
     // env_logger test
     env_logger::init();
+    print_redirect
+}
+
+fn main() {
+//    let print_redirect = setup_logging();
+    setup_logging();
 
     debug!("this is a debug {}", "message");
     error!("this is printed by default");
@@ -75,10 +81,14 @@ fn main() {
     }
 
     // Extract redirect
-    let mut log = print_redirect.into_inner();
+    /*
+    if false {
+        let mut log = print_redirect.into_inner();
 
-    let mut buf = String::new();
-    log.seek(SeekFrom::Start(0)).unwrap();
-    log.read_to_string(&mut buf).unwrap();
-    println!("buf is = {}", &buf[..]);
+        let mut buf = String::new();
+        log.seek(SeekFrom::Start(0)).unwrap();
+        log.read_to_string(&mut buf).unwrap();
+        println!("buf is = {}", &buf[..]);
+    }
+    */
 }
